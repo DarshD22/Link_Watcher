@@ -1,4 +1,5 @@
 "use client";
+import { Suspense } from "react";
 import { useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import AddLinkForm from "@/components/AddLinkForm";
@@ -64,7 +65,9 @@ export default function DashboardContent() {
 
   return (
     <div style={{ display: "flex", gap: 32 }}>
-      <Sidebar allTags={allTags} />
+      <Suspense fallback={<div style={{ width: 200, padding: "20px", color: "#666" }}>Loading...</div>}>
+        <Sidebar allTags={allTags} />
+      </Suspense>
 
       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 24 }}>
         {/* Top bar */}

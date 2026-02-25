@@ -2,6 +2,7 @@
 // Client component that handles the status page logic
 
 "use client";
+import { Suspense } from "react";
 import { useEffect, useState, useCallback } from "react";
 import Sidebar from "@/components/Sidebar";
 
@@ -168,7 +169,9 @@ export default function StatusContent() {
         color: "#e8e8e8", fontFamily: "DM Mono, monospace",
         display: "flex", gap: 32,
       }}>
-        <Sidebar allTags={[]} />
+        <Suspense fallback={<div style={{ width: 200, padding: "20px", color: "#666" }}>Loading...</div>}>
+          <Sidebar allTags={[]} />
+        </Suspense>
         
         <div style={{ flex: 1, padding: "60px 24px" }}>
 
