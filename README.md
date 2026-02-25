@@ -23,7 +23,7 @@ A single-user web app that monitors 3–8 web pages for content changes, generat
 ### 1. Clone and install
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/DarshD22/Link_Watcher
 cd linkwatcher
 npm install
 ```
@@ -170,7 +170,6 @@ src/
 │       ├── projects/route.ts
 │       ├── projects/[id]/route.ts
 │       ├── status/route.ts
-│       ├── export/link/[linkId]/route.ts
 │       ├── stats/route.ts
 │       ├── summarize/route.ts
 │       └── notifications/test/route.ts
