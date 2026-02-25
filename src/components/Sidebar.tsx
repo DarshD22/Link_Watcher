@@ -20,7 +20,23 @@ export default function Sidebar({ allTags }: Props) {
   const activeTag = searchParams.get("tag");
 
   useEffect(() => {
-    fetch("/api/projects").then((r) => r.json()).then(setProjects);
+    fetch("/api/projects")
+      .then((r) => {
+        if (!r.ok) throw new Error(`API error: ${r.status}`);
+        return r.json();
+      })
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setProjects(data);
+        } else {
+          console.error("Expected array from /api/projects, got:", data);
+          setProjects([]);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to fetch projects:", err);
+        setProjects([]);
+      });
   }, []);
 
   const linkStyle = (active: boolean) => ({

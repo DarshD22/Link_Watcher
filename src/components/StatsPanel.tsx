@@ -101,9 +101,24 @@ export default function StatsPanel() {
 
   useEffect(() => {
     fetch("/api/stats")
-      .then((r) => r.json())
-      .then((d) => { setStats(d); setLoading(false); })
-      .catch(() => setLoading(false));
+      .then((r) => {
+        if (!r.ok) throw new Error(`API error: ${r.status}`);
+        return r.json();
+      })
+      .then((d) => {
+        if (d && typeof d === "object" && "totalLinks" in d) {
+          setStats(d);
+        } else {
+          console.error("Unexpected response from /api/stats:", d);
+          setStats(null);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch stats:", err);
+        setStats(null);
+        setLoading(false);
+      });
   }, []);
 
   if (loading) {

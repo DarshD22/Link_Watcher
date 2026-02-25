@@ -30,14 +30,28 @@ export default function DashboardContent() {
     if (projectId) params.set("projectId", projectId);
     if (tag) params.set("tag", tag);
 
-    const res = await fetch(`/api/links?${params.toString()}`);
-    const data: LinkDoc[] = await res.json();
-    setLinks(data);
-
-    // Collect all unique tags for sidebar
-    const tags = [...new Set(data.flatMap((l) => l.tags ?? []))];
-    setAllTags(tags);
-    setLoading(false);
+    try {
+      const res = await fetch(`/api/links?${params.toString()}`);
+      if (!res.ok) throw new Error(`API error: ${res.status}`);
+      const data = await res.json();
+      
+      if (!Array.isArray(data)) {
+        console.error("Expected array from /api/links, got:", data);
+        setLinks([]);
+        setAllTags([]);
+      } else {
+        setLinks(data);
+        // Collect all unique tags for sidebar
+        const tags = [...new Set(data.flatMap((l) => l.tags ?? []))];
+        setAllTags(tags);
+      }
+    } catch (err) {
+      console.error("Failed to fetch links:", err);
+      setLinks([]);
+      setAllTags([]);
+    } finally {
+      setLoading(false);
+    }
   }, [searchParams]);
 
   useEffect(() => { fetchLinks(); }, [fetchLinks]);
